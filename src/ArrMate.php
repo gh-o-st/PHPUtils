@@ -72,6 +72,39 @@ class ArrMate {
     }
 
     /**
+     * Recursively replaces values in a multi-dimensional array.
+     *
+     * @param array $array        The input array.
+     * @param array $replacements The replacements array.
+     * @return array              The resulting array.
+     */
+    public static function replace_recursive(array $array, array $replacements): array {
+        $stack = [[$array]];
+        $result = [];
+    
+        while (!empty($stack)) {
+            $current = array_pop($stack);
+            $innerArray = end($current);
+            array_pop($current);
+    
+            foreach ($innerArray as $key => $item) {
+                if (is_array($item)) {
+                    $current[] = $item;
+                } else {
+                    $result[$key] = $replacements[$item] ?? $item;
+                }
+            }
+    
+            if (!empty($current)) {
+                $stack[] = $current;
+            }
+        }
+    
+        return $result;
+    }
+    
+
+    /**
      * Applies a callback function recursively to each element of an array.
      *
      * @param callable $callback The callback function to run for each element.
@@ -79,11 +112,30 @@ class ArrMate {
      * @return array              The resulting array after applying the callback.
      */
     public static function map_recursive(callable $callback, array $array): array {
-        $func = function ($item) use (&$func, &$callback) {
-            return is_array($item) ? array_map($func, $item) : call_user_func($callback, $item);
-        };
-        return array_map($func, $array);
+        $stack = [[$array]];
+        $result = [];
+    
+        while (!empty($stack)) {
+            $current = array_pop($stack);
+            $innerArray = end($current);
+            array_pop($current);
+    
+            foreach ($innerArray as $key => $item) {
+                if (is_array($item)) {
+                    $current[] = $item;
+                } else {
+                    $result[$key] = call_user_func($callback, $item);
+                }
+            }
+    
+            if (!empty($current)) {
+                $stack[] = $current;
+            }
+        }
+    
+        return $result;
     }
+    
 
     /**
      * Merges two arrays recursively, overwriting keys of the same name.

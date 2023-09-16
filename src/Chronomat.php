@@ -459,4 +459,27 @@ class Chronomat {
         return $newRange;
     }
 
+    /**
+     * Convert a datetime from one timezone to another and format it.
+     *
+     * @param string $time     The input datetime string (e.g., '2023-09-16 14:30:00').
+     * @param string $fromTz   The source timezone (e.g., 'America/New_York').
+     * @param string $toTz     The target timezone (e.g., 'Europe/London').
+     * @param string $format   The desired datetime format (optional, default is 'Y-m-d H:i:s').
+     * @return string|false    The converted and formatted datetime string, or false on failure.
+     */
+    public static function convert_timezone(string $time, string $fromTz, string $toTz, string $format = 'Y-m-d H:i:s') {
+        try {
+            $fromTimeZone = new DateTimeZone($fromTz);
+            $toTimeZone = new DateTimeZone($toTz);
+            
+            $date = new DateTime($time, $fromTimeZone);
+            $date->setTimezone($toTimeZone);
+            
+            return $date->format($format);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
 }
