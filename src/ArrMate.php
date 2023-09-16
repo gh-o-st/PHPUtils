@@ -135,7 +135,6 @@ class ArrMate {
     
         return $result;
     }
-    
 
     /**
      * Merges two arrays recursively, overwriting keys of the same name.
@@ -144,15 +143,23 @@ class ArrMate {
      * @param array $array2 The second input array.
      * @return array         The merged array.
      */
-    public static function merge_recursive_distinct(array &$array1, array &$array2): array {
+    public static function merge_recursive_distinct(array $array1, array $array2): array {
         $merged = $array1;
-        foreach ($array2 as $key => &$value) {
-            if (is_array($value) && isset ($merged [$key]) && is_array($merged [$key])) {
-                $merged [$key] = self::merge_recursive_distinct($merged [$key], $value);
-            } else {
-                $merged [$key] = $value;
+        $stack = new SplStack();
+        $stack->push([$array1, $array2]);
+
+        while (!$stack->isEmpty()) {
+            list($merged, $currentArray) = $stack->pop();
+
+            foreach ($currentArray as $key => $value) {
+                if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+                    $stack->push([&$merged[$key], $value]);
+                } else {
+                    $merged[$key] = $value;
+                }
             }
         }
+
         return $merged;
     }
 
