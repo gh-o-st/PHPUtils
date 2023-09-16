@@ -28,12 +28,6 @@ $names = ArrMate::pluck($collection, 'name');
 echo $names; // array('John', 'Jane', 'Jack', 'Jill')
 
 // Retrieve a specific value from a collection of arrays and use it as the key
-$collection = array(
-    array('name' => 'John', 'age' => 21),
-    array('name' => 'Jane', 'age' => 22),
-    array('name' => 'Jack', 'age' => 23),
-    array('name' => 'Jill', 'age' => 24),
-);
 $names = ArrMate::pluck($collection, 'name', 'age');
 echo $names; // array(21 => 'John', 22 => 'Jane', 23 => 'Jack', 24 => 'Jill')
 
