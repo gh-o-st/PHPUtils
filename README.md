@@ -1,5 +1,5 @@
 
-# PHP Utility Library by Joshua Jones
+# PHP Utility Library
 
 This repository contains several utility classes designed to assist in various tasks related to date and time operations, array manipulations, and password strength evaluation. Each class has its unique set of features to simplify complex operations.
 
